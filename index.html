@@ -3,23 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <title>Polar Training Dashboard</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; }
+    .ok { color: #137333; }
+    .fail { color: #b00020; }
+    code { background: #f4f4f4; padding: 0.15rem 0.35rem; border-radius: 4px; }
+    button { padding: 0.6rem 1rem; cursor: pointer; }
+  </style>
 </head>
 <body>
   <h1>Hello, Polar project</h1>
   <p>This page is deployed from Azure Static Web Apps.</p>
 
-  <button type="button" onclick="window.location.href='/api/polar status</h2>
-  <p id="backendStatus">Checking /api/health...</p>
+  <!-- Inline button (complete and correct) -->
+  /api/polar/connect
+    Connect Polar
+  </button>
+
+  <h2>Backend status</h2>
+  <p id="backendStatus">Checking <code>/api/health</code>...</p>
 
   <script>
     async function checkBackend() {
       const el = document.getElementById("backendStatus");
       try {
         const res = await fetch("/api/health", { cache: "no-store" });
+        if (!res.ok) throw new Error("HTTP " + res.status);
         const data = await res.json();
         el.textContent = "OK: " + JSON.stringify(data);
+        el.className = "ok";
       } catch (e) {
         el.textContent = "FAILED: " + e.message;
+        el.className = "fail";
       }
     }
     checkBackend();
