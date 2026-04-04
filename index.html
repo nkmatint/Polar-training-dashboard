@@ -15,8 +15,8 @@
   <h1>Hello, Polar project</h1>
   <p>This page is deployed from Azure Static Web Apps.</p>
 
-  <!-- Inline button (complete and correct) -->
-  /api/polar/connect
+  <!-- Connect Polar button (inline) -->
+  <button type="button" onclick="window.location.href='/api/polar/connect'">
     Connect Polar
   </button>
 
@@ -25,16 +25,16 @@
 
   <script>
     async function checkBackend() {
-      const el = document.getElementById("backendStatus");
+      const el = document.getElementById('backendStatus');
       try {
-        const res = await fetch("/api/health", { cache: "no-store" });
-        if (!res.ok) throw new Error("HTTP " + res.status);
+        const res = await fetch('/api/health', { cache: 'no-store' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         const data = await res.json();
-        el.textContent = "OK: " + JSON.stringify(data);
-        el.className = "ok";
+        el.textContent = 'OK: ' + JSON.stringify(data);
+        el.className = 'ok';
       } catch (e) {
-        el.textContent = "FAILED: " + e.message;
-        el.className = "fail";
+        el.textContent = 'FAILED: ' + e.message;
+        el.className = 'fail';
       }
     }
     checkBackend();
