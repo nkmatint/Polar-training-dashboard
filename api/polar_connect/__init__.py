@@ -2,22 +2,22 @@ import os
 import urllib.parse
 import azure.functions as func
 
+
 def main(req: func.HttpRequest) -> func.HttpResponse:
+    """Redirect user to Polar OAuth2 authorization endpoint."""
     client_id = os.environ["POLAR_CLIENT_ID"]
     redirect_uri = os.environ["POLAR_REDIRECT_URI"]
 
-    # Polar authorization endpoint (OAuth2 authorization code flow)
-    # response_type=code is the only supported response type. [1](https://azure.microsoft.com/en-us/pricing/details/functions/)
+    # Optional anti-CSRF state (single-user MVP)
+    state = "mvp-single-user"
+
     params = {
         "response_type": "code",
         "client_id": client_id,
         "redirect_uri": redirect_uri,
-        # scope is optional; if omitted, user is asked to grant all client scopes. [1](https://azure.microsoft.com/en-us/pricing/details/functions/)
         "scope": "accesslink.read_all",
-        # optional anti-CSRF state
-        "state": "dev-single-user"
+        "state": state,
     }
 
     url = "https://flow.polar.com/oauth2/authorization?" + urllib.parse.urlencode(params)
-
     return func.HttpResponse(status_code=302, headers={"Location": url})
